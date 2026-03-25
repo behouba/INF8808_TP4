@@ -26,8 +26,24 @@ def get_plot(my_df, gdp_range, co2_range):
         Returns:
             The generated figure
     '''
-    # TODO : Define figure with animation
-    return None
+    fig = px.scatter(
+        my_df,
+        x='GDP',
+        y='CO2',
+        animation_frame='Year',
+        size='Population',
+        color='Continent',
+        hover_name='Country Name',
+        custom_data=['Population', 'GDP', 'CO2'],
+        log_x=True,
+        log_y=True,
+        size_max=30,
+        range_x=gdp_range,
+        range_y=co2_range,
+        color_discrete_sequence=px.colors.qualitative.Set1
+    )
+    fig.update_traces(marker=dict(sizemin=6))
+    return fig
 
 
 def update_animation_hover_template(fig):
@@ -42,8 +58,12 @@ def update_animation_hover_template(fig):
             The updated figure
     '''
 
-    # TODO : Set the hover template
-    return None
+    template = hover_template.get_bubble_hover_template()
+    fig.update_traces(hovertemplate=template)
+    for frame in fig.frames:
+        for trace in frame.data:
+            trace.hovertemplate = template
+    return fig
 
 
 def update_animation_menu(fig):
@@ -56,8 +76,10 @@ def update_animation_menu(fig):
         Returns
             The updated figure
     '''
-    # TODO : Update animation menu
-    return None
+    fig.layout.updatemenus[0].buttons[0].label = 'Animate'
+    fig.layout.updatemenus[0].buttons = [fig.layout.updatemenus[0].buttons[0]]
+    fig.layout.sliders[0].currentvalue.prefix = 'Data for year : '
+    return fig
 
 
 def update_axes_labels(fig):
@@ -69,8 +91,9 @@ def update_axes_labels(fig):
         Returns:
             The updated figure
     '''
-    # TODO : Update labels
-    return None
+    fig.update_xaxes(title_text='GDP per capita ($ USD)')
+    fig.update_yaxes(title_text='CO2 emissions per capita (metric tonnes)')
+    return fig
 
 
 def update_template(fig):
@@ -83,8 +106,8 @@ def update_template(fig):
         Returns
             The updated figure
     '''
-    # TODO : Update template
-    return None
+    fig.update_layout(template='simple_white')
+    return fig
 
 
 def update_legend(fig):
@@ -96,5 +119,5 @@ def update_legend(fig):
         Returns:
             The updated figure
     '''
-    # TODO : Update legend
-    return None
+    fig.update_layout(legend_title_text='Legend')
+    return fig
